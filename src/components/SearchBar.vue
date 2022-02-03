@@ -4,11 +4,11 @@
     <button type="button" @click="ricercaFilm">Cerca</button>
     <div class="filmTrovati">
       <div class="film" v-for="(element, index) in films" :key="index">
-        <h1>{{element.title}}</h1>
-        <h2>{{element.original_title}}</h2>
-        <p>{{element.original_language}}</p>
-        <p>{{element.vote_count}}</p>
-        <p>{{element.vote_average}}</p>
+        <h2>Titolo: {{element.title}}</h2>
+        <h3>Titolo originale: {{element.original_title}}</h3>
+        <p>Lingua: {{element.original_language}}</p>
+        <p>Voti: {{element.vote_count}}</p>
+        <p>Valutazione: {{element.vote_average}}</p>
       </div>
     </div>
   </div>
@@ -21,18 +21,22 @@ export default {
   name: 'SearchBar',
   data(){
     return {
-      apiURL: 'https://api.themoviedb.org/3/search/movie?api_key=35c708968a77a980b6cd9af13310e62e&query=',
+      apiURL: 'https://api.themoviedb.org/3/search/movie',
       films: []
     }
   },
   methods: {
     ricercaFilm: function(){
-      filtroRicercaFilm: document.querySelector('.searchBar>input').value;
-      apiURL: 'https://api.themoviedb.org/3/search/movie?api_key=35c708968a77a980b6cd9af13310e62e&query=' + filtroRicercaFilm;
+      let filtroRicercaFilm = document.querySelector('.searchBar>input').value;
       axios
-      .get(this.apiURL)
+      .get(this.apiURL, {
+        params: {
+          api_key: '35c708968a77a980b6cd9af13310e62e',
+          query: filtroRicercaFilm,
+        },
+      })
       .then(risposta => {
-        this.films = risposta.data.response
+        this.films = risposta.data.results
       })
       .catch(function (error) {
         console.log(error);
@@ -51,7 +55,7 @@ export default {
       color: #33C933;
       height: 25px;
       width: 60vw;
-      margin: 0 50px 6vh 200px;
+      margin: 0 30px 5vh 200px;
 
       &::placeholder {
         color: #219621;
@@ -73,17 +77,25 @@ export default {
 
     .filmTrovati {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      height: 60vh;
       padding: 30px;
-      margin: 0 100px;
+      margin: 0 50px;
 
       .film {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 30px;
         margin: 30px;
+
+        h2, h3, p {
+          color: #ffffee;
+          padding: 10px 0;
+        }
       }
     }
   }
