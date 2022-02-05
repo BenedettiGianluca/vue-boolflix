@@ -1,12 +1,27 @@
 <template>
   <div class="searchBar">
-    <input type="text" placeholder="Digita il nome di un film">
-    <button type="button" @click="ricercaFilm">Cerca</button>
-    <div class="filmTrovati">
-      <div class="film" v-for="(element, index) in films" :key="index">
+    <input type="text" placeholder="Digita il nome di un film o di una serie tv">
+    <button type="button" @click="ricerca">Cerca</button>
+    <div class="filmSerieTrovati">
+      <div class="film" v-for="(element, filmsIndex) in films" :key="filmsIndex">
         <h2>Titolo: {{element.title}}</h2>
         <h3>Titolo originale: {{element.original_title}}</h3>
-        <p>Lingua: {{element.original_language}}</p>
+        <p>Lingua: <span v-if="((element.original_language!='it')&&(element.original_language!='en')&&(element.original_language!='fr'))">non specificata</span>
+          <img v-if="(element.original_language=='it')" src="https://7laghikartitalia.it/wp-content/uploads/Bandiera-d-Italia-1920x1080.jpg">
+          <img v-if="(element.original_language=='en')" src="https://besthqwallpapers.com/Uploads/26-5-2019/94067/thumb2-flag-of-united-kingdom-4k-stone-background-grunge-flag-europe.jpg">
+          <img v-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
+        </p>
+        <p>Voti: {{element.vote_count}}</p>
+        <p>Valutazione: {{element.vote_average}}</p>
+      </div>
+      <div class="tvShow" v-for="(element, seriesIndex) in series" :key="seriesIndex">
+        <h2>Titolo: {{element.name}}</h2>
+        <h3>Titolo originale: {{element.original_name}}</h3>
+        <p>Lingua: <span v-if="((element.original_language!='it')&&(element.original_language!='en')&&(element.original_language!='fr'))">non specificata</span>
+          <img v-if="(element.original_language=='it')" src="https://7laghikartitalia.it/wp-content/uploads/Bandiera-d-Italia-1920x1080.jpg">
+          <img v-if="(element.original_language=='en')" src="https://besthqwallpapers.com/Uploads/26-5-2019/94067/thumb2-flag-of-united-kingdom-4k-stone-background-grunge-flag-europe.jpg">
+          <img v-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
+        </p>
         <p>Voti: {{element.vote_count}}</p>
         <p>Valutazione: {{element.vote_average}}</p>
       </div>
@@ -15,28 +30,44 @@
 </template>
 
 <script>
-import axios from 'axios';   /* push di prova */
+import axios from 'axios';
 
 export default {
   name: 'SearchBar',
   data(){
     return {
-      apiURL: 'https://api.themoviedb.org/3/search/movie',
-      films: []
+      apiMoviesURL: 'https://api.themoviedb.org/3/search/movie',
+      apiSeriesURL: 'https://api.themoviedb.org/3/search/tv',
+      films: [],
+      series: []
     }
   },
   methods: {
-    ricercaFilm: function(){
-      let filtroRicercaFilm = document.querySelector('.searchBar>input').value;
+    ricerca: function(){
+      let filtroRicerca = document.querySelector('.searchBar>input').value;
       axios
-      .get(this.apiURL, {
+      .get(this.apiMoviesURL, {
         params: {
           api_key: '35c708968a77a980b6cd9af13310e62e',
-          query: filtroRicercaFilm,
+          query: filtroRicerca,
         },
       })
       .then(risposta => {
         this.films = risposta.data.results
+      })
+      .catch(function (error) {
+        console.log(error);
+      }),
+
+      axios
+      .get(this.apiSeriesURL, {
+        params: {
+          api_key: '35c708968a77a980b6cd9af13310e62e',
+          query: filtroRicerca,
+        },
+      })
+      .then(risposta => {
+        this.series = risposta.data.results
       })
       .catch(function (error) {
         console.log(error);
@@ -75,7 +106,7 @@ export default {
       padding: 5px;
     }
 
-    .filmTrovati {
+    .filmSerieTrovati {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -84,7 +115,7 @@ export default {
       padding: 30px;
       margin: 0 50px;
 
-      .film {
+      .film, .tvShow {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -95,6 +126,11 @@ export default {
         h2, h3, p {
           color: #ffffee;
           padding: 10px 0;
+
+          img {
+            height: 18px;
+            width: 24px;
+          }
         }
       }
     }
