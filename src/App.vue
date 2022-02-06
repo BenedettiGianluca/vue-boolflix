@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <SearchBar />
+    <Header />
+    <Main />
   </div>
 </template>
 
 <script>
-import SearchBar from './components/SearchBar.vue';
+  import Header from './components/Header.vue';
+  import Main from './components/Main.vue';
 
-export default {
-  name: 'App',
-  components: {
-    SearchBar
+  export default {
+    name: 'App',
+    components: {
+      Header,
+      Main
+    }
   }
-}
 </script>
 
 <style lang="scss">
