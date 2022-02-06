@@ -4,6 +4,7 @@
     <button type="button" @click="ricerca">Cerca</button>
     <div class="filmSerieTrovati">
       <div class="film" v-for="(element, filmsIndex) in films" :key="filmsIndex">
+        <img :src="`https://image.tmdb.org/t/p/w342${element.poster_path}`">
         <h2>Titolo: {{element.title}}</h2>
         <h3>Titolo originale: {{element.original_title}}</h3>
         <p>Lingua: <span v-if="((element.original_language!='it')&&(element.original_language!='en')&&(element.original_language!='fr'))">non specificata</span>
@@ -12,9 +13,16 @@
           <img v-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
         </p>
         <p>Voti: {{element.vote_count}}</p>
-        <p>Valutazione: {{element.vote_average}}</p>
+        <p class="stelle">Valutazione: 
+          <i v-if="Math.ceil(element.vote_average/2)>=1" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=2" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=3" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=4" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=5" class="fas fa-star"></i>
+        </p>
       </div>
       <div class="tvShow" v-for="(element, seriesIndex) in series" :key="seriesIndex">
+        <img :src="`https://image.tmdb.org/t/p/w342${element.poster_path}`">
         <h2>Titolo: {{element.name}}</h2>
         <h3>Titolo originale: {{element.original_name}}</h3>
         <p>Lingua: <span v-if="((element.original_language!='it')&&(element.original_language!='en')&&(element.original_language!='fr'))">non specificata</span>
@@ -23,7 +31,13 @@
           <img v-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
         </p>
         <p>Voti: {{element.vote_count}}</p>
-        <p>Valutazione: {{element.vote_average}}</p>
+        <p class="stelle">Valutazione: 
+          <i v-if="Math.ceil(element.vote_average/2)>=1" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=2" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=3" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=4" class="fas fa-star"></i>
+          <i v-if="Math.ceil(element.vote_average/2)>=5" class="fas fa-star"></i>
+        </p>
       </div>
     </div>
   </div>
@@ -53,11 +67,11 @@ export default {
         },
       })
       .then(risposta => {
-        this.films = risposta.data.results
+        this.films = risposta.data.results;
       })
       .catch(function (error) {
         console.log(error);
-      }),
+      });
 
       axios
       .get(this.apiSeriesURL, {
@@ -67,11 +81,11 @@ export default {
         },
       })
       .then(risposta => {
-        this.series = risposta.data.results
+        this.series = risposta.data.results;
       })
       .catch(function (error) {
         console.log(error);
-      })
+      });
     }
   }
 }
@@ -130,6 +144,10 @@ export default {
           img {
             height: 18px;
             width: 24px;
+          }
+
+          .fa-star {
+            color: yellow;
           }
         }
       }
