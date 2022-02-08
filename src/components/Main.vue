@@ -27,8 +27,8 @@
           <h3>Titolo originale: {{element.original_name}}</h3>
           <p>Lingua: <span v-if="((element.original_language!='it')&&(element.original_language!='en')&&(element.original_language!='fr'))">non specificata</span>
             <img v-if="(element.original_language=='it')" src="https://7laghikartitalia.it/wp-content/uploads/Bandiera-d-Italia-1920x1080.jpg">
-            <img v-if="(element.original_language=='en')" src="https://besthqwallpapers.com/Uploads/26-5-2019/94067/thumb2-flag-of-united-kingdom-4k-stone-background-grunge-flag-europe.jpg">
-            <img v-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
+            <img v-else-if="(element.original_language=='en')" src="https://besthqwallpapers.com/Uploads/26-5-2019/94067/thumb2-flag-of-united-kingdom-4k-stone-background-grunge-flag-europe.jpg">
+            <img v-else-if="(element.original_language=='fr')" src="https://p4.wallpaperbetter.com/wallpaper/824/310/435/flags-flag-of-france-wallpaper-preview.jpg">
           </p>
           <p>Voti: {{element.vote_count}}</p>
           <p class="stelle">Valutazione: 

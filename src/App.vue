@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header @search="ricercaFilmSerie"/>
-    <Main />
+    <Main :films="films" :series="series"/>
   </div>
 </template>
 
@@ -27,7 +27,7 @@
     methods: {
       ricercaFilmSerie: function(nomeFilmSerie){
         let filtroRicerca = nomeFilmSerie;
-
+        
         axios
         .get(this.apiMoviesURL, {
           params: {
@@ -37,6 +37,7 @@
         })
         .then(risposta => {
           this.films = risposta.data.results;
+          console.log(this.films);
         })
         .catch(function (error) {
           console.log(error);
